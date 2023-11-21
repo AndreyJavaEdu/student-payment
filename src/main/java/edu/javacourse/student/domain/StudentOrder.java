@@ -53,5 +53,4 @@ public class StudentOrder {
     @Embedded
     private Adult husband;
 
-
 }
