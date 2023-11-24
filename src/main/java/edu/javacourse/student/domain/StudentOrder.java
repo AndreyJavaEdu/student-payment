@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Setter
@@ -22,6 +23,10 @@ public class StudentOrder {
     private StudentOrderStatus studentOrderStatus;
     @Column(name = "student_order_date")
     private LocalDate studentOrderDate;
+
+    @OneToMany(cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.LAZY,
+    mappedBy = "studentOrder")
+    private List<StudentOrderChild> children;
 
     @AssociationOverrides({
             @AssociationOverride(name = "address.street", joinColumns = @JoinColumn(name = "w_street_code")),
