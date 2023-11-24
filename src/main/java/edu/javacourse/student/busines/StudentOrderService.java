@@ -1,7 +1,6 @@
 package edu.javacourse.student.busines;
 
-import edu.javacourse.student.dao.StreetRepository;
-import edu.javacourse.student.dao.StudentRepository;
+import edu.javacourse.student.dao.*;
 import edu.javacourse.student.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +18,29 @@ public class StudentOrderService {
     private StudentRepository studentRepository;
     @Autowired
     private StreetRepository streetRepository;
+    @Autowired
+    private StudentOrderStatusRepository daoStatus;
+    @Autowired
+    private PassportOfficeRepository daoPassportOffice;
+    @Autowired
+    private UniversityRepository daoUniversity;
+    @Autowired
+    private RegisterOfficeRepository daoRegisterOffice;
 
     @Transactional
     public void testSave() {
         StudentOrder so = new StudentOrder();
+        so.setStudentOrderDate(LocalDate.now());
+        so.setStudentOrderStatus(daoStatus.getOne(1L));
+
         so.setHusband(buildPerson(false));
         so.setWife(buildPerson(true));
+
+        so.setCertificateNumber("CERTIFICATE");
+        so.setRegisterOffice(daoRegisterOffice.getOne(1L));
+        so.setMarriageDate(LocalDate.now());
         studentRepository.save(so);
+
 
     }
 
@@ -53,6 +68,9 @@ public class StudentOrderService {
             p.setPassportSerial("WIFE_S");
             p.setPassportNumber("WIFE_N");
             p.setIssueDate(LocalDate.now());
+            p.setPassportOffice(daoPassportOffice.getOne(1L));
+            p.setStudentNumber("12345");
+            p.setUniversity(daoUniversity.getOne(1L));
         } else {
             p.setSurName("Рюрик");
             p.setGivenName("Иван");
@@ -60,6 +78,9 @@ public class StudentOrderService {
             p.setPassportSerial("HUSBAND_S");
             p.setPassportNumber("HUSBAND_N");
             p.setIssueDate(LocalDate.now());
+            p.setPassportOffice(daoPassportOffice.getOne(1L));
+            p.setStudentNumber("67890");
+            p.setUniversity(daoUniversity.getOne(1L));
         }
 
         return p;
