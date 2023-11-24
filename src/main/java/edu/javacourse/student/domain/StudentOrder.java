@@ -82,6 +82,4 @@ public class StudentOrder {
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "register_office_id")
     private RegisterOffice registerOffice;
-
-
 }

@@ -40,5 +40,5 @@ public class StudentOrderChild extends Person {
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn(name = "с_register_office_id")
     private RegisterOffice registerOffice;
-    
+
 }

@@ -26,6 +26,8 @@ public class StudentOrderService {
     private UniversityRepository daoUniversity;
     @Autowired
     private RegisterOfficeRepository daoRegisterOffice;
+    @Autowired
+    private StudentOrderChildRepository childRepository;
 
     @Transactional
     public void testSave() {
@@ -41,13 +43,16 @@ public class StudentOrderService {
         so.setMarriageDate(LocalDate.now());
         studentRepository.save(so);
 
+        StudentOrderChild soc = buildChild(so);
 
+        childRepository.save(soc);
     }
 
     @Transactional
     public void testGet() {
         List<StudentOrder> sos = studentRepository.findAll();
         LOGGER.info(sos.get(0).getWife().getGivenName());
+        LOGGER.info(sos.get(0).getChildren().get(0).getGivenName());
     }
 
     private Adult buildPerson(boolean wife) {
@@ -83,6 +88,27 @@ public class StudentOrderService {
             p.setUniversity(daoUniversity.getOne(1L));
         }
 
+        return p;
+    }
+
+    private StudentOrderChild buildChild(StudentOrder so) {
+        StudentOrderChild p = new StudentOrderChild();
+        p.setStudentOrder(so);
+        p.setDateOfBirthday(LocalDate.now());
+        Address a = new Address();
+        a.setPostCode("19000000");
+        a.setBuilding("21");
+        a.setExtension("B");
+        a.setApartment("199");
+        Street one = streetRepository.getOne(1L);
+        a.setStreet(one);
+        p.setAddress(a);
+        p.setSurName("Рюрик");
+        p.setGivenName("Дмитрий");
+        p.setPatronymic("Иванович");
+        p.setCertificateDate(LocalDate.now());
+        p.setCertificateNumber("BIRTH N");
+        p.setRegisterOffice(daoRegisterOffice.getOne(1L));
         return p;
     }
 }
